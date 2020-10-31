@@ -1,0 +1,23 @@
+version: '3.6'
+services:
+
+  docker-registry:
+    container_name: docker-registry
+    image: registry:latest
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+        REGISTRY_HTTP_ADDR: 0.0.0.0:5000
+        REGISTRY_HTTP_TLS_CERTIFICATE: /certs/rbpi-kmaster.as.crt
+        REGISTRY_HTTP_TLS_KEY: /certs/rbpi-kmaster.as.key
+        REGISTRY_AUTH: htpasswd
+        REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+        REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+    volumes:
+      - ./volumes/docker-registry/data:/var/lib/registry
+      - ./volumes/docker-registry/log:/var/log/registry
+      - ./volumes/docker-registry/certs:/certs
+      - ./volumes/docker-registry/auth:/auth
+
+
