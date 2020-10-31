@@ -1,6 +1,7 @@
 version: '3.6'
+#####################################################################
 services:
-
+#####################################################################
   docker-registry:
     container_name: docker-registry
     image: registry:latest
@@ -16,5 +17,19 @@ services:
       - ./volumes/docker-registry/log:/var/log/registry
       - ./volumes/docker-registry/certs:/certs
       - ./volumes/docker-registry/auth:/auth
-
-
+#####################################################################
+  docker-registry-ui:
+    container_name: docker-registry-ui
+    image: joxit/docker-registry-ui:debian
+    restart: unless-stopped
+    ports:
+      - 5080:80
+    environment:
+        REGISTRY_TITLE: My Private Docker Registry
+        REGISTRY_URL: https://docker-registry:5000
+    volumes:
+      - ./volumes/docker-registry-ui/log:/var/log/registry
+      - ./volumes/docker-registry-ui/certs:/certs
+    depends_on:
+      - docker-registry
+#####################################################################
